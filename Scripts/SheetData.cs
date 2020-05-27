@@ -91,6 +91,8 @@ public class SheetData
 			bool isNotesRow= headName.Contains(ConstDefine.StrNotesRow);
 			if (isNotesRow == false)
 			{
+				if (string.IsNullOrEmpty(headName))
+					throw new Exception($"检测到空列：第{++cellNum}列");
 				if (IsContainsHead(headName))
 					throw new Exception($"检测到重复列 : {headName}");
 			}
