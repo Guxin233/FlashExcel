@@ -56,6 +56,14 @@ public class SheetData
 		_workbook = workbook;
 		_sheet = sheet;
 
+		// 检测合并单元格
+		int MergedCount = sheet.NumMergedRegions;
+		for (int i = 0; i < MergedCount; i++)
+		{
+			var region = sheet.GetMergedRegion(i);			
+			throw new Exception($"导表工具不支持合并单元格，请移除合并单元格：{region.FormatAsString()}");
+		}
+
 		// 公式计算器
 		_evaluator = new XSSFFormulaEvaluator(_workbook);
 		
