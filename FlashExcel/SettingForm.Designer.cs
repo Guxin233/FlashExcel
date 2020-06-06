@@ -31,7 +31,11 @@ partial class SettingForm
 			this.completeTextBox = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.label1 = new System.Windows.Forms.Label();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.namespaceTextBox = new System.Windows.Forms.TextBox();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// completeCheckBox
@@ -77,11 +81,42 @@ partial class SettingForm
 			this.label1.TabIndex = 5;
 			this.label1.Text = "提示：数值单元格为空，工具在导出时会报错";
 			// 
+			// groupBox2
+			// 
+			this.groupBox2.Controls.Add(this.label2);
+			this.groupBox2.Controls.Add(this.namespaceTextBox);
+			this.groupBox2.Location = new System.Drawing.Point(21, 114);
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.Size = new System.Drawing.Size(656, 86);
+			this.groupBox2.TabIndex = 6;
+			this.groupBox2.TabStop = false;
+			this.groupBox2.Text = "命名空间";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+			this.label2.Location = new System.Drawing.Point(16, 50);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(515, 12);
+			this.label2.TabIndex = 5;
+			this.label2.Text = "提示：为CS脚本生成自定义命名空间，格式：导出类名1[命名空间名]; 导出类名2[命名空间名];";
+			// 
+			// namespaceTextBox
+			// 
+			this.namespaceTextBox.Location = new System.Drawing.Point(18, 20);
+			this.namespaceTextBox.Name = "namespaceTextBox";
+			this.namespaceTextBox.Size = new System.Drawing.Size(620, 21);
+			this.namespaceTextBox.TabIndex = 1;
+			this.namespaceTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+			this.namespaceTextBox.TextChanged += new System.EventHandler(this.namespaceTextBox_TextChanged);
+			// 
 			// SettingForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(702, 350);
+			this.Controls.Add(this.groupBox2);
 			this.Controls.Add(this.groupBox1);
 			this.Name = "SettingForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -89,6 +124,8 @@ partial class SettingForm
 			this.Load += new System.EventHandler(this.SettingForm_Load);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 
 	}
@@ -99,4 +136,7 @@ partial class SettingForm
 	private System.Windows.Forms.TextBox completeTextBox;
 	private System.Windows.Forms.GroupBox groupBox1;
 	private System.Windows.Forms.Label label1;
+	private System.Windows.Forms.GroupBox groupBox2;
+	private System.Windows.Forms.Label label2;
+	private System.Windows.Forms.TextBox namespaceTextBox;
 }

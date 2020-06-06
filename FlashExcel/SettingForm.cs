@@ -25,6 +25,17 @@ public partial class SettingForm : Form
 	}
 
 	/// <summary>
+	/// 当窗体关闭的时候
+	/// </summary>
+	protected override void OnClosing(CancelEventArgs e)
+	{
+		base.OnClosing(e);
+
+		// 退出前存储配置
+		SettingConfig.Instance.SaveConfig();
+	}
+
+	/// <summary>
 	/// 初始化主窗体
 	/// </summary>
 	private void InitWindowsForm()
@@ -32,6 +43,7 @@ public partial class SettingForm : Form
 		completeCheckBox.Checked = SettingConfig.Instance.EnableAutoCompleteCell;
 		completeTextBox.Text = SettingConfig.Instance.AutoCompleteCellContent;
 		completeCheckBox_CheckedChanged(null, null);
+		namespaceTextBox.Text = SettingConfig.Instance.NamespaceContent;
 	}
 
 	private void completeCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -43,5 +55,10 @@ public partial class SettingForm : Form
 	private void completeTextBox_TextChanged(object sender, EventArgs e)
 	{
 		SettingConfig.Instance.AutoCompleteCellContent = completeTextBox.Text;
+	}
+
+	private void namespaceTextBox_TextChanged(object sender, EventArgs e)
+	{
+		SettingConfig.Instance.NamespaceContent = namespaceTextBox.Text;
 	}
 }

@@ -5,9 +5,9 @@ using System.Text;
 using System.IO;
 
 [ExportAttribute("导出CS脚本")]
-public class CsExporter : BaseExporter
+public class CSExporter : BaseExporter
 {
-	public CsExporter(SheetData sheetData)
+	public CSExporter(SheetData sheetData)
 		: base(sheetData)
 	{
 	}
@@ -22,19 +22,21 @@ public class CsExporter : BaseExporter
 
 			// Table类
 			WriteTabCalss(sw);
-			sw.WriteLine("{");
+			sw.WriteLine("\t{");
 			WriteTabClassMember(sw, createLogo);
 			sw.WriteLine();
 			WriteTabClassFunction(sw, createLogo);
-			sw.WriteLine("}");
+			sw.WriteLine("\t}");
 			sw.WriteLine();
 
 			// Config类
 			WriteCfgAttribute(sw);
 			WriteCfgClass(sw);
-			sw.WriteLine("{");
+			sw.WriteLine("\t{");
 			WriteCfgClassFunction(sw);
-			sw.WriteLine("}");
+			sw.WriteLine("\t}");
+
+			WriteNamespaceEnd(sw);
 		}
 	}
 	private void WriteNamespace(StreamWriter sw)
@@ -48,14 +50,22 @@ public class CsExporter : BaseExporter
 		sw.WriteLine("using MotionFramework.Config;");	
 		sw.WriteLine("using System.Collections.Generic;");
 		sw.WriteLine();
+
+		string namespaceName = SettingConfig.Instance.GetNamespace(nameof(CSExporter));
+		if (string.IsNullOrEmpty(namespaceName) == false)
+		{
+			sw.WriteLine($"namespace {namespaceName}");
+			sw.WriteLine("{");
+		}
 	}
 	private void WriteTabCalss(StreamWriter sw)
 	{
-		sw.WriteLine($"public class Cfg{_sheet.FileName}Table : ConfigTable");
+		string tChar = "\t";
+		sw.WriteLine(tChar + $"public class Cfg{_sheet.FileName}Table : ConfigTable");
 	}
 	private void WriteTabClassMember(StreamWriter sw, string createLogo)
 	{
-		string tChar = "\t";
+		string ttChar = "\t\t";
 		string protectedChar = " { protected set; get; }";
 
 		for (int i = 0; i < _sheet.Heads.Count; i++)
@@ -79,20 +89,20 @@ public class CsExporter : BaseExporter
 				head.Type == "string" || head.Type == "List<string>" ||
 				head.Type == "bool")
 			{
-				sw.WriteLine(tChar + $"public {head.Type} " + headName + protectedChar);
+				sw.WriteLine(ttChar + $"public {head.Type} " + headName + protectedChar);
 			}
 			else if (head.Type == "language")
 			{
-				sw.WriteLine(tChar + $"public string " + headName + protectedChar);
+				sw.WriteLine(ttChar + $"public string " + headName + protectedChar);
 			}
 			else if (head.Type == "List<language>")
 			{
-				sw.WriteLine(tChar + $"public List<string> " + headName + protectedChar);
+				sw.WriteLine(ttChar + $"public List<string> " + headName + protectedChar);
 			}
 			else if (head.Type.Contains("enum") || head.Type.Contains("class"))
 			{
 				string extendType = StringHelper.GetExtendType(head.Type);
-				sw.WriteLine(tChar + $"public {extendType} " + headName + protectedChar);
+				sw.WriteLine(ttChar + $"public {extendType} " + headName + protectedChar);
 			}
 			else
 			{
@@ -102,11 +112,11 @@ public class CsExporter : BaseExporter
 	}
 	private void WriteTabClassFunction(StreamWriter sw, string createLogo)
 	{
-		string tChar = "\t";
-		string tTwoChar = "\t\t";
+		string ttChar = "\t\t";
+		string tttChar = "\t\t\t";
 
-		sw.WriteLine(tChar + "public override void ReadByte(ByteBuffer byteBuf)");
-		sw.WriteLine(tChar + "{");
+		sw.WriteLine(ttChar + "public override void ReadByte(ByteBuffer byteBuf)");
+		sw.WriteLine(ttChar + "{");
 
 		for (int i = 0; i < _sheet.Heads.Count; i++)
 		{
@@ -121,76 +131,76 @@ public class CsExporter : BaseExporter
 			// HashCode
 			if (head.Name == ConstDefine.StrHeadId && head.Type == "string")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadUTF().GetHashCode();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadUTF().GetHashCode();");
 				continue;
 			}
 
 			if (head.Type == "bool")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadBool();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadBool();");
 			}
 			else if(head.Type == "int")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadInt();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadInt();");
 			}
 			else if (head.Type == "long")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadLong();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadLong();");
 			}
 			else if (head.Type == "float")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadFloat();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadFloat();");
 			}
 			else if (head.Type == "double")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadDouble();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadDouble();");
 			}
 
 			else if (head.Type == "List<int>")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadListInt();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadListInt();");
 			}
 			else if (head.Type == "List<long>")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadListLong();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadListLong();");
 			}
 			else if (head.Type == "List<float>")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadListFloat();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadListFloat();");
 			}	
 			else if (head.Type == "List<double>")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadListDouble();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadListDouble();");
 			}
 
 			else if (head.Type == "string")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadUTF();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadUTF();");
 			}
 			else if (head.Type == "List<string>")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = byteBuf.ReadListUTF();");
+				sw.WriteLine(tttChar + $"{headName} = byteBuf.ReadListUTF();");
 			}
 
 			// NOTE：多语言在字节流会是哈希值
 			else if (head.Type == "language")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = LANG.Convert(byteBuf.ReadInt());");
+				sw.WriteLine(tttChar + $"{headName} = LANG.Convert(byteBuf.ReadInt());");
 			}
 			else if (head.Type == "List<language>")
 			{
-				sw.WriteLine(tTwoChar + $"{headName} = LANG.Convert(byteBuf.ReadListInt());");
+				sw.WriteLine(tttChar + $"{headName} = LANG.Convert(byteBuf.ReadListInt());");
 			}
 
 			else if (head.Type.Contains("enum"))
 			{
 				string extendType = StringHelper.GetExtendType(head.Type);
-				sw.WriteLine(tTwoChar + $"{headName} = StringConvert.IndexToEnum<{extendType}>(byteBuf.ReadInt());");
+				sw.WriteLine(tttChar + $"{headName} = StringConvert.IndexToEnum<{extendType}>(byteBuf.ReadInt());");
 			}
 			else if (head.Type.Contains("class"))
 			{
 				string extendType = StringHelper.GetExtendType(head.Type);
-				sw.WriteLine(tTwoChar + $"{headName} = {extendType}.Parse(byteBuf);");
+				sw.WriteLine(tttChar + $"{headName} = {extendType}.Parse(byteBuf);");
 			}
 			else
 			{
@@ -198,26 +208,36 @@ public class CsExporter : BaseExporter
 			}
 		}
 
-		sw.WriteLine(tChar + "}");
+		sw.WriteLine(ttChar + "}");
 	}
 	private void WriteCfgAttribute(StreamWriter sw)
 	{
-		sw.WriteLine($"[ConfigAttribute(nameof(EConfigType.{_sheet.FileName}))]");
+		string tChar = "\t";
+		sw.WriteLine(tChar + $"[ConfigAttribute(nameof(EConfigType.{_sheet.FileName}))]");
 	}
 	private void WriteCfgClass(StreamWriter sw)
 	{
-		sw.WriteLine($"public partial class Cfg{_sheet.FileName} : AssetConfig");
+		string tChar = "\t";
+		sw.WriteLine(tChar + $"public partial class Cfg{_sheet.FileName} : AssetConfig");
 	}
 	private void WriteCfgClassFunction(StreamWriter sw)
 	{
-		string tChar = "\t";
-		string tTwoChar = "\t\t";
+		string ttChar = "\t\t";
+		string tttChar = "\t\t\t";
 
-		sw.WriteLine(tChar + "protected override ConfigTable ReadTable(ByteBuffer byteBuffer)");
-		sw.WriteLine(tChar + "{");
-		sw.WriteLine(tTwoChar + $"Cfg{_sheet.FileName}Table table = new Cfg{_sheet.FileName}Table" + "();");
-		sw.WriteLine(tTwoChar + "table.ReadByte(byteBuffer);");
-		sw.WriteLine(tTwoChar + "return table;");
-		sw.WriteLine(tChar + "}");
+		sw.WriteLine(ttChar + "protected override ConfigTable ReadTable(ByteBuffer byteBuffer)");
+		sw.WriteLine(ttChar + "{");
+		sw.WriteLine(tttChar + $"Cfg{_sheet.FileName}Table table = new Cfg{_sheet.FileName}Table" + "();");
+		sw.WriteLine(tttChar + "table.ReadByte(byteBuffer);");
+		sw.WriteLine(tttChar + "return table;");
+		sw.WriteLine(ttChar + "}");
+	}
+	private void WriteNamespaceEnd(StreamWriter sw)
+	{
+		string namespaceName = SettingConfig.Instance.GetNamespace(nameof(CSExporter));
+		if (string.IsNullOrEmpty(namespaceName) == false)
+		{
+			sw.WriteLine("}");
+		}
 	}
 }

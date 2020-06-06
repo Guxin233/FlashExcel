@@ -39,4 +39,39 @@ public static class StringHelper
 		int indexOfB = content.IndexOf(']');
 		return content.Substring(indexOfA + 1, indexOfB - indexOfA - 1);
 	}
+
+	/// <summary>
+	/// 获取命名空间名字
+	/// </summary>
+	public static string GetNamespace(string content)
+	{
+		// 注意：因为不能规范输入内容，这里做了容错
+		try
+		{
+			int indexOfA = content.IndexOf('[');
+			int indexOfB = content.IndexOf(']');
+			return content.Substring(indexOfA + 1, indexOfB - indexOfA - 1);
+		}
+		catch (Exception e)
+		{
+			return string.Empty;
+		}
+	}
+
+	/// <summary>
+	/// 获取导出类名字
+	/// </summary>
+	public static string GetExportName(string content)
+	{
+		// 注意：因为不能规范输入内容，这里做了容错
+		try
+		{
+			int indexOf = content.IndexOf('[');
+			return content.Substring(0, indexOf);
+		}
+		catch (Exception e)
+		{
+			return string.Empty;
+		}
+	}
 }

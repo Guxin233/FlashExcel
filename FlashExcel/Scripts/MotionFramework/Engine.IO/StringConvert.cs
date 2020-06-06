@@ -1,4 +1,5 @@
 ﻿//--------------------------------------------------
+// Motion Framework
 // Copyright©2018-2020 何冠峰
 // Licensed under the MIT license
 //--------------------------------------------------
@@ -98,7 +99,7 @@ namespace MotionFramework.IO
 
 		/// <summary>
 		/// 转换为枚举
-		/// 枚举索引字符串转换为枚举类型
+		/// 枚举索引转换为枚举类型
 		/// </summary>
 		public static T IndexToEnum<T>(string index) where T : IConvertible
 		{
@@ -108,7 +109,7 @@ namespace MotionFramework.IO
 
 		/// <summary>
 		/// 转换为枚举
-		/// 枚举索引值转换为枚举类型
+		/// 枚举索引转换为枚举类型
 		/// </summary>
 		public static T IndexToEnum<T>(int index) where T : IConvertible
 		{
@@ -121,7 +122,7 @@ namespace MotionFramework.IO
 
 		/// <summary>
 		/// 转换为枚举
-		/// 从枚举名称转换为枚举
+		/// 枚举名称转换为枚举类型
 		/// </summary>
 		public static T NameToEnum<T>(string name)
 		{

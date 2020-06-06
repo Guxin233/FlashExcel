@@ -189,8 +189,12 @@ public class ILRExporter : BaseExporter
 		sw.WriteLine("using System.Collections.Generic;");
 		sw.WriteLine();
 
-		sw.WriteLine("namespace Hotfix");
-		sw.WriteLine("{");
+		string namespaceName = SettingConfig.Instance.GetNamespace(nameof(ILRExporter));
+		if(string.IsNullOrEmpty(namespaceName) == false)
+		{
+			sw.WriteLine($"namespace {namespaceName}");
+			sw.WriteLine("{");
+		}
 	}
 	private void WriteTabCalss(StreamWriter sw)
 	{
@@ -199,8 +203,8 @@ public class ILRExporter : BaseExporter
 	}
 	private void WriteTabClassMember(StreamWriter sw, string createLogo)
 	{
-		string tTwoChar = "\t\t";
-		string tThreeChar = "\t\t\t";
+		string ttChar = "\t\t";
+		string tttChar = "\t\t\t";
 		string protectedChar = " { protected set; get; }";
 
 		List<string> headTypeList = new List<string>();
@@ -231,23 +235,23 @@ public class ILRExporter : BaseExporter
 				head.Type == "string" || head.Type == "List<string>" ||
 				head.Type == "bool")
 			{
-				sw.WriteLine(tTwoChar + $"public {head.Type} {headName}" + protectedChar);
+				sw.WriteLine(ttChar + $"public {head.Type} {headName}" + protectedChar);
 				headTypeList.Add(head.Type);
 			}
 			else if (head.Type == "language")
 			{
-				sw.WriteLine(tTwoChar + $"public string {headName}" + protectedChar);
+				sw.WriteLine(ttChar + $"public string {headName}" + protectedChar);
 				headTypeList.Add("string");
 			}
 			else if (head.Type == "List<language>")
 			{
-				sw.WriteLine(tTwoChar + $"public List<string> {headName}" + protectedChar);
+				sw.WriteLine(ttChar + $"public List<string> {headName}" + protectedChar);
 				headTypeList.Add("List<string>");
 			}
 			else if (head.Type.Contains("enum") || head.Type.Contains("class"))
 			{
 				string extendType = StringHelper.GetExtendType(head.Type);
-				sw.WriteLine(tTwoChar + $"public {extendType} {headName}" + protectedChar);
+				sw.WriteLine(ttChar + $"public {extendType} {headName}" + protectedChar);
 				headTypeList.Add(extendType);
 			}
 			else
@@ -264,14 +268,14 @@ public class ILRExporter : BaseExporter
 			sb.Append($"{headTypeList[i]} {StringHelper.ToLowerFirstChar(headNameList[i])}");
 			if (i < headNameList.Count - 1) sb.Append(", ");
 		}
-		sw.WriteLine(tTwoChar + $"public Cfg{_sheet.FileName}Table({sb.ToString()})");
-		sw.WriteLine(tTwoChar + "{");
+		sw.WriteLine(ttChar + $"public Cfg{_sheet.FileName}Table({sb.ToString()})");
+		sw.WriteLine(ttChar + "{");
 		for (int i = 0; i < headNameList.Count; i++)
 		{
 			string name = headNameList[i];
-			sw.WriteLine(tThreeChar + $"{StringHelper.ToUpperFirstChar(name)} = {StringHelper.ToLowerFirstChar(name)};");
+			sw.WriteLine(tttChar + $"{StringHelper.ToUpperFirstChar(name)} = {StringHelper.ToLowerFirstChar(name)};");
 		}
-		sw.WriteLine(tTwoChar + "}");
+		sw.WriteLine(ttChar + "}");
 	}
 	private void WriteCfgClass(StreamWriter sw)
 	{
@@ -280,44 +284,48 @@ public class ILRExporter : BaseExporter
 	}
 	private void WriteCfgClassInstance(StreamWriter sw)
 	{
-		string tTwoChar = "\t\t";
-		string tThreeChar = "\t\t\t";
-		string tFourChar = "\t\t\t\t";
-		sw.WriteLine(tTwoChar + $"private static Cfg{_sheet.FileName} _instance;");
-		sw.WriteLine(tTwoChar + $"public static Cfg{_sheet.FileName} Instance");
-		sw.WriteLine(tTwoChar + "{");
-		sw.WriteLine(tThreeChar + "get");
-		sw.WriteLine(tThreeChar + "{");
-		sw.WriteLine(tFourChar + $"if (_instance == null) {{ _instance = new Cfg{_sheet.FileName}(); _instance.Create(); }}");
-		sw.WriteLine(tFourChar + "return _instance;");
-		sw.WriteLine(tThreeChar + "}");
-		sw.WriteLine(tTwoChar + "}");
+		string ttChar = "\t\t";
+		string tttChar = "\t\t\t";
+		string ttttChar = "\t\t\t\t";
+		sw.WriteLine(ttChar + $"private static Cfg{_sheet.FileName} _instance;");
+		sw.WriteLine(ttChar + $"public static Cfg{_sheet.FileName} Instance");
+		sw.WriteLine(ttChar + "{");
+		sw.WriteLine(tttChar + "get");
+		sw.WriteLine(tttChar + "{");
+		sw.WriteLine(ttttChar + $"if (_instance == null) {{ _instance = new Cfg{_sheet.FileName}(); _instance.Create(); }}");
+		sw.WriteLine(ttttChar + "return _instance;");
+		sw.WriteLine(tttChar + "}");
+		sw.WriteLine(ttChar + "}");
 
 		sw.WriteLine();
-		sw.WriteLine(tTwoChar + $"private Cfg{_sheet.FileName}() {{ }}");
+		sw.WriteLine(ttChar + $"private Cfg{_sheet.FileName}() {{ }}");
 
-		sw.WriteLine(tTwoChar + $"public Cfg{_sheet.FileName}Table GetConfigTable(int key)");
-		sw.WriteLine(tTwoChar + "{");
-		sw.WriteLine(tThreeChar + $"return GetTable(key) as Cfg{_sheet.FileName}Table;");
-		sw.WriteLine(tTwoChar + "}");
+		sw.WriteLine(ttChar + $"public Cfg{_sheet.FileName}Table GetConfigTable(int key)");
+		sw.WriteLine(ttChar + "{");
+		sw.WriteLine(tttChar + $"return GetTable(key) as Cfg{_sheet.FileName}Table;");
+		sw.WriteLine(ttChar + "}");
 	}
 	private void WriteCfgClassData(StreamWriter sw, string createLogo)
 	{
-		string tTwoChar = "\t\t";
-		string tThreeChar = "\t\t\t";
+		string ttChar = "\t\t";
+		string tttChar = "\t\t\t";
 		string[] lines = GetDataLines(createLogo);
 
-		sw.WriteLine(tTwoChar + "public void Create()");
-		sw.WriteLine(tTwoChar + "{");
+		sw.WriteLine(ttChar + "public void Create()");
+		sw.WriteLine(ttChar + "{");
 		for (int i = 0; i < lines.Length; i++)
 		{
-			sw.WriteLine(tThreeChar + lines[i]);
+			sw.WriteLine(tttChar + lines[i]);
 		}
-		sw.WriteLine(tTwoChar + "}");
+		sw.WriteLine(ttChar + "}");
 	}
 	private void WriteNamespaceEnd(StreamWriter sw)
 	{
-		sw.WriteLine("}");
+		string namespaceName = SettingConfig.Instance.GetNamespace(nameof(ILRExporter));
+		if (string.IsNullOrEmpty(namespaceName) == false)
+		{
+			sw.WriteLine("}");
+		}
 	}
 
 	/// <summary>

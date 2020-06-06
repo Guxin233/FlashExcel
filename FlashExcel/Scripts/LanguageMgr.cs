@@ -147,6 +147,10 @@ public class LanguageMgr
 	/// </summary>
 	public void CreateAutoGenerateLanguageFile()
 	{
+		// 如果没有多语言内容，那么不需要创建多语言表
+		if (_cacheLanguage.Count == 0)
+			return;
+
 		try
 		{
 			int nextRow = 0;
