@@ -44,8 +44,8 @@ class TextExporter : BaseExporter
 ```
 
 ## 设置
-整形和浮点型的数值单元格，如果策划忘记填写而为空，那么导出的时候工具会报错。我们也可以设置数值单元格自动补齐功能，来规避这个问题。
-
+1. 整形和浮点型的数值单元格，如果策划忘记填写而为空，那么导出的时候工具会报错。我们也可以设置数值单元格自动补齐功能，来规避这个问题。
+2. 对于CS脚本导出器和ILR脚本导出器，我们可以写入自定义的命名空间，例如：ILRExporter[MyNamespaceName1];CSExporter[MyNamespaceName2]  
 ![image](https://github.com/gmhevinci/FlashExcel/raw/master/Docs/Image/img4.png)
 
 ## 多语言支持
