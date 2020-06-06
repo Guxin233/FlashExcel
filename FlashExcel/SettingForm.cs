@@ -31,8 +31,7 @@ public partial class SettingForm : Form
 	{
 		base.OnClosing(e);
 
-		// 退出前存储配置
-		SettingConfig.Instance.SaveConfig();
+		SettingConfig.Instance.OnCloseSettingForm();
 	}
 
 	/// <summary>

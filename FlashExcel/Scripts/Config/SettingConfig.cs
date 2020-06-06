@@ -100,13 +100,14 @@ public class SettingConfig
 			StreamWriter sw = new StreamWriter(fs);
 			sw.Flush();
 
-			if (AutoCompleteCellContent == null) AutoCompleteCellContent = string.Empty;
-			if (NamespaceContent == null) NamespaceContent = string.Empty;
+			if (AutoCompleteCellContent == null)
+				AutoCompleteCellContent = string.Empty;
+			if (NamespaceContent == null)
+				NamespaceContent = string.Empty;
 
 			sw.WriteLine(EnableAutoCompleteCell ? "true" : "false");
 			sw.WriteLine(AutoCompleteCellContent);
 			sw.WriteLine(NamespaceContent);
-			ParseNamespaceContent(NamespaceContent);
 
 			sw.Flush();
 			sw.Dispose();
@@ -123,11 +124,21 @@ public class SettingConfig
 		}
 	}
 
+	/// <summary>
+	/// 当关闭设置窗体的时候
+	/// </summary>
+	public void OnCloseSettingForm()
+	{
+		// 我们需要重新分析预设的命名空间
+		ParseNamespaceContent(NamespaceContent);
+	}
+
+
 	#region CS脚本命名空间相关
 	private readonly Dictionary<string, string> _namespace = new Dictionary<string, string>();
 
 	/// <summary>
-	/// 分析预设内容
+	/// 分析命名空间预设内容
 	/// </summary>
 	private void ParseNamespaceContent(string content)
 	{
