@@ -589,7 +589,7 @@ partial class MainForm
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "闪电导表工具";
+			this.Text = "闪电导表工具 V1.0.3";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.clientGroupBox.ResumeLayout(false);
 			this.clientGroupBox.PerformLayout();
