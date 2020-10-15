@@ -30,7 +30,6 @@ public class CSExporter : BaseExporter
 			sw.WriteLine();
 
 			// Config类
-			WriteCfgAttribute(sw);
 			WriteCfgClass(sw);
 			sw.WriteLine("\t{");
 			WriteCfgClassFunction(sw);
@@ -209,11 +208,6 @@ public class CSExporter : BaseExporter
 		}
 
 		sw.WriteLine(ttChar + "}");
-	}
-	private void WriteCfgAttribute(StreamWriter sw)
-	{
-		string tChar = "\t";
-		sw.WriteLine(tChar + $"[ConfigAttribute(nameof(EConfigType.{_sheet.FileName}))]");
 	}
 	private void WriteCfgClass(StreamWriter sw)
 	{

@@ -52,7 +52,7 @@ public static class StringHelper
 			int indexOfB = content.IndexOf(']');
 			return content.Substring(indexOfA + 1, indexOfB - indexOfA - 1);
 		}
-		catch (Exception e)
+		catch (Exception)
 		{
 			return string.Empty;
 		}
@@ -69,7 +69,7 @@ public static class StringHelper
 			int indexOf = content.IndexOf('[');
 			return content.Substring(0, indexOf);
 		}
-		catch (Exception e)
+		catch (Exception)
 		{
 			return string.Empty;
 		}

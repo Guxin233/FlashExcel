@@ -47,7 +47,7 @@ public class BytesExporter : BaseExporter
 			}
 
 			// 检测数据大小有效性
-			int tabSize = tableBuffer.ReadableBytes();
+			int tabSize = tableBuffer.ReadableBytes;
 			if (tabSize == 0)
 				throw new Exception($"{_sheet.FileName} tableBuffer readable bytes is zero.");
 			
@@ -60,8 +60,8 @@ public class BytesExporter : BaseExporter
 		string filePath = StringHelper.MakeSaveFullPath(path, $"{_sheet.FileName}.bytes");
 		using (FileStream fs = new FileStream(filePath, FileMode.Create))
 		{
-			byte[] data = fileBuffer.Buf;
-			int length = fileBuffer.ReadableBytes();
+			byte[] data = fileBuffer.GetBuffer();
+			int length = fileBuffer.ReadableBytes;
 			fs.Write(data, 0, length);
 		}
 	}

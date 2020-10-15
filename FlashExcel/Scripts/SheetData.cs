@@ -57,16 +57,16 @@ public class SheetData
 		_sheet = sheet;
 
 		// 检测合并单元格
-		int MergedCount = sheet.NumMergedRegions;
+		int MergedCount = _sheet.NumMergedRegions;
 		for (int i = 0; i < MergedCount; i++)
 		{
-			var region = sheet.GetMergedRegion(i);			
+			var region = sheet.GetMergedRegion(i);
 			throw new Exception($"导表工具不支持合并单元格，请移除合并单元格：{region.FormatAsString()}");
 		}
 
 		// 公式计算器
 		_evaluator = new XSSFFormulaEvaluator(_workbook);
-		
+
 		int firstRowNum = sheet.FirstRowNum;
 
 		// 数据头一共三行
@@ -96,7 +96,7 @@ public class SheetData
 
 			// 检测重复的列
 			string headName = GetCellValue(row1cell);
-			bool isNotesRow= headName.Contains(ConstDefine.StrNotesRow);
+			bool isNotesRow = headName.Contains(ConstDefine.StrNotesRow);
 			if (isNotesRow == false)
 			{
 				if (string.IsNullOrEmpty(headName))
@@ -122,7 +122,7 @@ public class SheetData
 		// 所有数据行
 		int tableBeginRowNum = ++firstRowNum; //Table初始行
 		for (int rowNum = tableBeginRowNum; rowNum <= sheet.LastRowNum; rowNum++)
-		{	
+		{
 			IRow row = sheet.GetRow(rowNum);
 
 			// 如果是结尾行
@@ -135,7 +135,7 @@ public class SheetData
 		}
 
 		// 创建所有注册的导出器
-		for(int i=0; i< ExportHandler.ExportTypes.Count; i++)
+		for (int i = 0; i < ExportHandler.ExportTypes.Count; i++)
 		{
 			Type type = ExportHandler.ExportTypes[i];
 			BaseExporter exporter = (BaseExporter)Activator.CreateInstance(type, this);
@@ -152,7 +152,7 @@ public class SheetData
 	public void Export(Type type, string path, string createLogo)
 	{
 		BaseExporter exporter = GetExporter(type);
-		if(exporter.IsContainsLogo(createLogo))
+		if (exporter.IsContainsLogo(createLogo))
 			exporter.ExportFile(path, createLogo);
 	}
 
